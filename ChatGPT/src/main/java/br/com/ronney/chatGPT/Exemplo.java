@@ -1,5 +1,7 @@
 package br.com.ronney.chatGPT;
 
+import java.util.Scanner;
+
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionRequest;
 
@@ -11,17 +13,27 @@ public class Exemplo {
 	// https://platform.openai.com/docs/models/gpt-3-5
 	private static final String myModel = "text-davinci-003";
 	
-	private static final String myPrompt = "Slogan para uma barraca de sorvete:";
+	private static final String myPrompt = "Peça o que quiser: ";
 	
 	public static void main(String[] args) {
+		
+		Scanner scanner = new Scanner(System.in);
+		System.out.print(myPrompt);
+		//String prompt = "Qual o seu nome?"; 
+		String prompt = scanner.nextLine();
+		
 		OpenAiService openAiService = new OpenAiService(API_KEY);	
 		CompletionRequest completionRequest = CompletionRequest
 				.builder()
 				.model(myModel)
-				.prompt(myPrompt)
+				.prompt(prompt)
 				.maxTokens(100)
+			//	.temperature(0.0) // variação de respostas
 				.build();
-		System.out.println(openAiService.createCompletion(completionRequest).getChoices());
+		
+		scanner.close();
+		
+		System.out.println("R.:" + openAiService.createCompletion(completionRequest).getChoices());
 	}
 
 }
