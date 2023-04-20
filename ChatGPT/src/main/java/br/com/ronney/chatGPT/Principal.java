@@ -18,32 +18,43 @@ public class Principal {
 	// https://platform.openai.com/docs/models/gpt-3-5
 	private static final String myModel = "text-davinci-003";
 	
-	private static final String myPrompt = "Peça o que quiser: ";
+	private static String myPrompt = "Peça o que quiser: ";
+	private static String promptScanner = "Crie um texto para me ajduar a vender o meu iPhone 8";
 	
 	public static void main(String[] args) throws IOException {
-		// chamadaBasica();
+		String tipoChamada = "Chamada <B>asica ou <S>ecundaria: ";
 		
+		Scanner scannerChamada = new Scanner(System.in);
+		System.out.print(tipoChamada);
+		String promptChamada = scannerChamada.nextLine();
+		
+		Scanner scannerPrompt = new Scanner(System.in);
+		System.out.print(myPrompt);
+		promptScanner = scannerPrompt.nextLine();
+
 		Properties properties = new Properties();
 		FileInputStream fileInputStream = new FileInputStream("./properties/conf.properties");
 		properties.load(fileInputStream);
 		API_KEY = properties.getProperty("openai.apikey");
-		chamadaSecundaria(API_KEY);
+
+		if (promptChamada.equals("B")) 
+			chamadaBasica(promptScanner);
+		else if (promptChamada.equals("S")) 
+			chamadaSecundaria(promptScanner);
+		else
+			System.out.println("Tipo de Chamada não tratada!");
+		
+		scannerChamada.close();
+		scannerPrompt.close();
 	}
 
-	private static void chamadaSecundaria(String apiKey) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.print(myPrompt);
-		String prompt = scanner.nextLine();
-		scanner.close();
-		Official methodsChatGPT = new Official(apiKey);
-		methodsChatGPT.ask(myModel, "", prompt);
+	private static void chamadaSecundaria(String promptScanner) {
+		Official methodsChatGPT = new Official(API_KEY);
+		methodsChatGPT.ask(myModel, "", promptScanner);
 	}
 	
-	private static void chamadaBasica() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.print(myPrompt);
-		String prompt = scanner.nextLine();
-		
+	private static void chamadaBasica(String prompt) {
+	
 		OpenAiService openAiService = new OpenAiService(API_KEY);	
 		CompletionRequest completionRequest = CompletionRequest
 				.builder()
@@ -53,8 +64,6 @@ public class Principal {
 			//	.temperature(0.0) // variação de respostas
 				.build();
 		
-		scanner.close();
-		// Crie um texto para me ajduar a vender o meu iPhone 8
 		System.out.println(openAiService.createCompletion(completionRequest).getChoices());
 	}
 }
