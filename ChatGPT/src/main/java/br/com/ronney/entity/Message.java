@@ -12,12 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message {
-
-	@JsonProperty(value = "role")
-	public String role;
-	
-	@JsonProperty(value = "content")
-	public String content;
-	
-	
+    @JsonProperty(value = "role")
+    public String role;
+    
+    @JsonProperty(value = "content")
+    public String content;    
 }

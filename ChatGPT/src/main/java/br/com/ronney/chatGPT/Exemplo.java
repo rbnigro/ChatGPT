@@ -5,6 +5,8 @@ import java.util.Scanner;
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionRequest;
 
+import br.com.ronney.methods.Official;
+
 public class Exemplo {
 
 	// https://platform.openai.com/account/api-keys
@@ -16,10 +18,22 @@ public class Exemplo {
 	private static final String myPrompt = "Peça o que quiser: ";
 	
 	public static void main(String[] args) {
-		
+		// chamadaBasica();
+		chamadaSecundaria(API_KEY);
+	}
+
+	private static void chamadaSecundaria(String apiKey) {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print(myPrompt);
-		//String prompt = "Qual o seu nome?"; 
+		String prompt = scanner.nextLine();
+		scanner.close();
+		Official methodsChatGPT = new Official(apiKey);
+		methodsChatGPT.ask(myModel, "", prompt);
+	}
+	
+	private static void chamadaBasica() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.print(myPrompt);
 		String prompt = scanner.nextLine();
 		
 		OpenAiService openAiService = new OpenAiService(API_KEY);	
@@ -32,8 +46,7 @@ public class Exemplo {
 				.build();
 		
 		scanner.close();
-		
-		System.out.println("R.:" + openAiService.createCompletion(completionRequest).getChoices());
+		// Crie um texto para me ajduar a vender o meu iPhone 8
+		System.out.println(openAiService.createCompletion(completionRequest).getChoices());
 	}
-
 }
