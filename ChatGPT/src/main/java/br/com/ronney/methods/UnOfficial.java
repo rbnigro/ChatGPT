@@ -7,30 +7,14 @@ import com.google.gson.JsonObject;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
-import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
 import net.jodah.expiringmap.ExpiringMap;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import br.com.ronney.entity.ChatCompletionRequestBody;
-import br.com.ronney.entity.ChatCompletionResponseBody;
-import br.com.ronney.erros.Erros;
-import br.com.ronney.erros.Excecoes;
-
-@Slf4j
-@Builder
+@Deprecated
 public class UnOfficial {
 
-	// UnofficialChatGPT
-	
     private String cookieName = "__Secure-next-auth.session-token";
 	private String conversationUrl = "https://chat.openai.com/backend-api/conversation";
 	private String userAgent = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot";
@@ -39,14 +23,12 @@ public class UnOfficial {
 	
 	private String conversationId;
 	private String parentMessageId;
-	private final String apiKey;
 	private final Gson gson = new Gson();
     private final Map<String, String> accessTokenCache = ExpiringMap.builder().expiration(60, TimeUnit.SECONDS).build();
 
     protected OkHttpClient client;
     
     public UnOfficial(String apiKey) {
-        this.apiKey = apiKey;
         this.client = new OkHttpClient();
     }
 			//TODO transformar em Classe
@@ -59,47 +41,8 @@ public class UnOfficial {
 			public void setSessionToken(String sessionToken) {
 				this.sessionToken = sessionToken;
 			}
-			
-	public String ask(String model, String role, String content) {
-		ChatCompletionResponseBody chatCompletionResponseBody = askOriginal(model, role, content);
-		List<ChatCompletionResponseBody.Choice> choices = chatCompletionResponseBody.getChoices();
-		StringBuilder result = new StringBuilder();
 	
-		for (ChatCompletionResponseBody.Choice choice : choices) {
-			result.append(choice.getMessage().getContent());
-		}
-		return result.toString();
-	}
-	
-	public ChatCompletionResponseBody askOriginal(String model, String role, String content) {
-		RequestBody body = RequestBody.create(buildRequestBody(model, role, content), MediaType.get("application/json; charset=utf-8"));
-		Request request = new Request.Builder()
-				.url(apiHost)
-				.header("Authorization", "Bearer " + apiKey)
-				.post(body)
-				.build();
-
-		try (Response response = client.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				if (response.body() == null) {
-					log.error("Request failed: {}, please try again", response.message());
-					throw new Excecoes(response.code(), "Request failed");
-				} else {
-					log.error("Request failed: {}, please try again", response.body().string());
-					throw new Excecoes(response.code(), response.body().string());
-				}
-			} else {
-				assert response.body() != null;
-				String bodyString = response.body().string();
-				return objectMapper.readValue(bodyString, ChatCompletionResponseBody.class);
-			}
-		} catch (IOException e) {
-			log.error("Request failed: {}", e.getMessage());
-			throw new Excecoes(Erros.SERVER_HAD_AN_ERROR.getCode(), e.getMessage());
-		}
-	}
-	   
-    public String askNoUse(String input) {
+    public String ask(String input) {
         HttpResponse<String> response = Unirest.post(conversationUrl)
                 .header("Authorization", "Bearer " + refreshAndGetAccessToken())
                 .header("Accept", "text/event-stream")

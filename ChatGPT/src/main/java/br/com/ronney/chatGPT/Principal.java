@@ -1,5 +1,8 @@
 package br.com.ronney.chatGPT;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Scanner;
 
 import com.theokanning.openai.OpenAiService;
@@ -7,18 +10,23 @@ import com.theokanning.openai.completion.CompletionRequest;
 
 import br.com.ronney.methods.Official;
 
-public class Exemplo {
+public class Principal {
 
 	// https://platform.openai.com/account/api-keys
-	private static final String API_KEY = "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";
+	private static String API_KEY;
 	
 	// https://platform.openai.com/docs/models/gpt-3-5
 	private static final String myModel = "text-davinci-003";
 	
 	private static final String myPrompt = "Peça o que quiser: ";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// chamadaBasica();
+		
+		Properties properties = new Properties();
+		FileInputStream fileInputStream = new FileInputStream("./properties/conf.properties");
+		properties.load(fileInputStream);
+		API_KEY = properties.getProperty("openai.apikey");
 		chamadaSecundaria(API_KEY);
 	}
 
