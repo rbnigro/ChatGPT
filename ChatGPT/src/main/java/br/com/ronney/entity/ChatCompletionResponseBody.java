@@ -34,13 +34,12 @@ public class ChatCompletionResponseBody {
 	public Usage usage;
 	
 	@Data
-	@Builder
     public static class Choice {
         @JsonProperty(value = "index")
         public Integer index;
         
-        @JsonProperty(value = "message")
-        public Message message;
+        @JsonProperty(value = "messages")
+        public Messages messages;
         
         @JsonProperty(value = "finish_reason")
         public String finishReason;
