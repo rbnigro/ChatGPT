@@ -100,7 +100,7 @@ public class Official {
         List<ChatCompletionResponseBody.Choice> choices = chatCompletionResponseBody.getChoices();
         StringBuilder result = new StringBuilder();
         for (ChatCompletionResponseBody.Choice choice : choices) {
-            result.append(choice.getText().getContent());
+            result.append(choice.getText());//.getContent());
         }
         return result.toString();
     }
@@ -164,7 +164,7 @@ public class Official {
 		StringBuilder result = new StringBuilder();
 	
 		for (ChatCompletionResponseBody.Choice choice : choices) {
-			result.append(choice.getText().getContent());
+			result.append(choice.getText());//.getContent());
 		}
 		return result.toString();
 	}

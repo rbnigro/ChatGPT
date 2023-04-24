@@ -48,8 +48,8 @@ public class ChatCompletionRequestBody {
     //@JsonProperty(value = "logit_bias")
     //private Map<Object, Object> logitBias;
     
-   // @JsonProperty(value = "messages")
-   // private List<Messages> messages;
+    //@JsonProperty(value = "message")
+    //private List<Message> message;
 
    // private String user = "";
 }
