@@ -14,10 +14,7 @@ public enum Erros {
     SERVER_HAD_AN_ERROR(500, "The server had an error while processing your request"),
     ;
 
-    @SuppressWarnings("unused")
 	private final Integer code;
-    
-    @SuppressWarnings("unused")
 	private final String msg;
 
     Erros(Integer code, String msg) {

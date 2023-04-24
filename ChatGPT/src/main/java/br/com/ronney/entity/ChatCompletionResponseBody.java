@@ -30,30 +30,33 @@ public class ChatCompletionResponseBody {
 	@JsonProperty(value = "choices")
 	public List<Choice> choices;
 	
-	@JsonProperty(value = "usage")
-	public Usage usage;
+//	@JsonProperty(value = "usage")
+//	public Usage usage;
 	
 	@Data
-    public static class Choice {
+	public static class Choice {
+        @JsonProperty(value = "text")
+        public Message text;
+
         @JsonProperty(value = "index")
         public Integer index;
         
-        @JsonProperty(value = "messages")
-        public Messages messages;
+        @JsonProperty(value = "logprobs")
+        private List<String> logprobs;
         
         @JsonProperty(value = "finish_reason")
         public String finishReason;
     }
  
-    @Data
-    public static class Usage {
-        @JsonProperty(value = "prompt_tokens")
-        public Integer promptTokens;
+ //   @Data
+ //   public static class Usage {
+ //       @JsonProperty(value = "prompt_tokens")
+ //       public Integer promptTokens;
         
-        @JsonProperty(value = "completion_tokens")
-        public Integer completionTokens;
+ //       @JsonProperty(value = "completion_tokens")
+ //       public Integer completionTokens;
         
-        @JsonProperty(value = "total_tokens")
-        public Integer totalTokens;
-    }
+  //      @JsonProperty(value = "total_tokens")
+  //      public Integer totalTokens;
+  //  }
 }

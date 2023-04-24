@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Messages {
+public class Message {
     @JsonProperty(value = "role")
     public String role;
     

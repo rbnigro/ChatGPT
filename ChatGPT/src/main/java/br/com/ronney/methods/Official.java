@@ -12,12 +12,13 @@ import java.util.Collections;
 import java.util.List;
 import br.com.ronney.entity.ChatCompletionRequestBody;
 import br.com.ronney.entity.ChatCompletionResponseBody;
-import br.com.ronney.entity.Messages;
+import br.com.ronney.entity.Message;
 import br.com.ronney.entity.Model;
 import br.com.ronney.erros.Excecoes;
+import lombok.extern.slf4j.Slf4j;
 import br.com.ronney.entity.Constants;
 
-// @Slf4j
+@Slf4j
 public class Official {
 
 	private final String apiKey;
@@ -74,32 +75,32 @@ public class Official {
                 .build();
     }
 
-  //  public String ask(String input) {
-  //      return ask(DEFAULT_MODEL.getName(), DEFAULT_USER, input);
-  //  }
+    public String ask(String input) throws IOException {
+        return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
+    }
 
-  //  public String ask(String user, String input) {
-  //      return ask(DEFAULT_MODEL.getName(), user, input);
-  //  }
+    public String ask(String user, String input) throws IOException {
+        return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
+    }
 
-  //  public String ask(Model model, String input) {
-  //      return ask(model.getName(), DEFAULT_USER, input);
-  //  }
+    public String ask(Model model, String input) throws IOException {
+        return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
+    }
 
- //   public String ask(List<Message> messages) {
-  //      return ask(DEFAULT_MODEL.getName(), messages);
-  //  }
+    public String ask(List<Message> messages) throws IOException {
+        return ask(Constants.DEFAULT_MODEL, messages);
+    }
 
-    public String ask(Model model, List<Messages> messages) throws IOException {
+    public String ask(Model model, List<Message> messages) throws IOException {
         return ask(model.getName(), messages);
     }
 
-    public String ask(String model, List<Messages> message) throws IOException {
+    public String ask(String model, List<Message> message) throws IOException {
         ChatCompletionResponseBody chatCompletionResponseBody = askOriginal(model, message);
         List<ChatCompletionResponseBody.Choice> choices = chatCompletionResponseBody.getChoices();
         StringBuilder result = new StringBuilder();
         for (ChatCompletionResponseBody.Choice choice : choices) {
-            result.append(choice.getMessages().getContent());
+            result.append(choice.getText().getContent());
         }
         return result.toString();
     }
@@ -108,7 +109,7 @@ public class Official {
         return ask(model.getName(), user, input);
     }
     
-    private String buildRequestBody(String model, List<Messages> messages) {
+    private String buildRequestBody(String model, List<Message> messages) {
         try {
             ChatCompletionRequestBody requestBody = ChatCompletionRequestBody.builder()
                     .model(model)
@@ -122,14 +123,14 @@ public class Official {
     }
     
     public ChatCompletionResponseBody askOriginal(String model, String role, String input) throws IOException {
-        return askOriginal(model, Collections.singletonList(Messages.builder()
+        return askOriginal(model, Collections.singletonList(Message.builder()
                 .role(role)
                 .content(input)
                 .build()));
     }
 
-    public ChatCompletionResponseBody askOriginal(String model, List<Messages> messages) throws IOException {
-        RequestBody body = RequestBody.create(buildRequestBody(model, messages), MediaType.get("application/json; charset=utf-8"));
+    public ChatCompletionResponseBody askOriginal(String model, List<Message> message) throws IOException {
+        RequestBody body = RequestBody.create(buildRequestBody(model, message), MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder()
                 .url(apiHost)
                 .header("Authorization", "Bearer " + apiKey)
@@ -138,14 +139,12 @@ public class Official {
 
         //try (Response response = okHttpClient. newCall(request).execute()) {
         Response response = okHttpClient.newCall(request).execute();
-        String myResult = response.body().string();
-        System.out.println(myResult);
             if (!response.isSuccessful()) {
                 if (response.body() == null) {
-                //    log.error("Request failed: {}, please try again", response.message());
+                    log.error("Request failed: {}, please try again", response.message());
                     throw new Excecoes(response.code(), "Request failed");
                 } else {
-                //    log.error("Request failed: {}, please try again", response.body().string());
+                    log.error("Request failed: {}, please try again", response.body().string());
                     throw new Excecoes(response.code(), response.body().string());
                 }
             } else {
@@ -165,7 +164,7 @@ public class Official {
 		StringBuilder result = new StringBuilder();
 	
 		for (ChatCompletionResponseBody.Choice choice : choices) {
-			result.append(choice.getMessages().getContent());
+			result.append(choice.getText().getContent());
 		}
 		return result.toString();
 	}
