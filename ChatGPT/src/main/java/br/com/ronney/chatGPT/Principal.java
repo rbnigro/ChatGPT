@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import br.com.ronney.entity.Constants;
-import br.com.ronney.methods.Official;
+import br.com.ronney.methods.CharGPT;
 
 public class Principal {
 
@@ -14,13 +14,14 @@ public class Principal {
 	// https://platform.openai.com/docs/models/gpt-3-5
 	private static String myModel = Constants.DEFAULT_MODEL;
 	
-	private static String promptScanner = "Crie um texto para me ajduar a vender o meu iPhone 8";
+	private static String promptScanner = "Crie um texto para me ajudar a vender o meu iPhone 8";
 	
 	public static void main(String[] args) throws IOException {
 	//	Scanner scannerPrompt = new Scanner(System.in);
 	//	System.out.print(myPrompt);
 	//	promptScanner = scannerPrompt.nextLine();
 
+		System.out.println(promptScanner);
 		Properties properties = new Properties();
 		FileInputStream fileInputStream = new FileInputStream("./properties/conf.properties");
 		properties.load(fileInputStream);
@@ -33,7 +34,7 @@ public class Principal {
 	}
 
 	private static void chamadaChatGPT(String promptScanner) throws IOException {
-		Official methodsChatGPT = new Official(API_KEY);
+		CharGPT methodsChatGPT = new CharGPT(API_KEY);
 		String retorno = methodsChatGPT.ask(myModel, "user", promptScanner);
 		System.out.println(retorno);
 	}

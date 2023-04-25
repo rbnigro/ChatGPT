@@ -2,8 +2,8 @@ package br.com.ronney.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ChatCompletionResponseBody {
 
 	@JsonProperty(value = "id")
@@ -28,13 +29,13 @@ public class ChatCompletionResponseBody {
 	public String model;
 	
 	@JsonProperty(value = "choices")
-	public List<Choice> choices;
+	public List<Choices> choices;
 	
 	@JsonProperty(value = "usage")
 	public Usage usage;
 	
 	@Data
-	public static class Choice {
+	public static class Choices {
         @JsonProperty(value = "text")
         public String text;
 
@@ -47,8 +48,9 @@ public class ChatCompletionResponseBody {
         @JsonProperty(value = "finish_reason")
         public String finishReason;
     }
- 
-    @Data
+
+
+	@Data
     public static class Usage {
         @JsonProperty(value = "prompt_tokens")
         public Integer promptTokens;
@@ -58,5 +60,21 @@ public class ChatCompletionResponseBody {
         
         @JsonProperty(value = "total_tokens")
         public Integer totalTokens;
+    }
+	
+	// Not in use
+	@Data
+    public static class ChoicesOLD {
+    	@JsonProperty(value = "messages")
+    	public MessageLocal messages;
+    }
+	
+    @Data
+    public static class MessageLocal {
+    	@JsonProperty(value = "role")    	
+    	public String role;
+    	
+    	@JsonProperty(value = "content")
+    	public String content;
     }
 }

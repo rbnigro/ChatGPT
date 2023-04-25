@@ -14,60 +14,61 @@ import br.com.ronney.entity.ChatCompletionRequestBody;
 import br.com.ronney.entity.ChatCompletionResponseBody;
 import br.com.ronney.entity.Message;
 import br.com.ronney.entity.Model;
+import br.com.ronney.erros.Erros;
 import br.com.ronney.erros.Excecoes;
 import lombok.extern.slf4j.Slf4j;
 import br.com.ronney.entity.Constants;
 
 @Slf4j
-public class Official {
+public class CharGPT {
 
 	private final String apiKey;
 	private String apiHost = Constants.DEFAULT_CHAT_COMPLETION_API_URL;
 	protected OkHttpClient okHttpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
-    public Official(String apiKey) {
+    public CharGPT(String apiKey) {
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient();
     }
 			
-    public Official(String apiKey, OkHttpClient okHttpClient) {
+    public CharGPT(String apiKey, OkHttpClient okHttpClient) {
         this.apiKey = apiKey;
         this.okHttpClient = okHttpClient;
     }
 
 
-    public Official(String apiKey, Proxy proxy) {
+    public CharGPT(String apiKey, Proxy proxy) {
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient.Builder().proxy(proxy).build();
     }
 
-    public Official(String apiKey, String proxyHost, int proxyPort) {
+    public CharGPT(String apiKey, String proxyHost, int proxyPort) {
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient.Builder().
                 proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
                 .build();
     }
     
-    public Official(String apiHost, String apiKey) {
+    public CharGPT(String apiHost, String apiKey) {
         this.apiHost = apiHost;
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient();
     }
     
-    public Official(String apiHost, String apiKey, OkHttpClient okHttpClient) {
+    public CharGPT(String apiHost, String apiKey, OkHttpClient okHttpClient) {
         this.apiHost = apiHost;
         this.apiKey = apiKey;
         this.okHttpClient = okHttpClient;
     }
 
-    public Official(String apiHost, String apiKey, Proxy proxy) {
+    public CharGPT(String apiHost, String apiKey, Proxy proxy) {
         this.apiHost = apiHost;
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient.Builder().proxy(proxy).build();
     }
 
-    public Official(String apiHost, String apiKey, String proxyHost, int proxyPort) {
+    public CharGPT(String apiHost, String apiKey, String proxyHost, int proxyPort) {
         this.apiHost = apiHost;
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient.Builder().
@@ -96,11 +97,11 @@ public class Official {
     }
 
     public String ask(String model, List<Message> message) throws IOException {
-        ChatCompletionResponseBody chatCompletionResponseBody = askOriginal(model, message);
-        List<ChatCompletionResponseBody.Choice> choices = chatCompletionResponseBody.getChoices();
+        ChatCompletionResponseBody chatCompletionResponseBody = askModelMessage(model, message);
+        List<ChatCompletionResponseBody.Choices> choices = chatCompletionResponseBody.getChoices();
         StringBuilder result = new StringBuilder();
-        for (ChatCompletionResponseBody.Choice choice : choices) {
-            result.append(choice.getText());//.getContent());
+        for (ChatCompletionResponseBody.Choices choice : choices) {
+            result.append(choice.getText());
         }
         return result.toString();
     }
@@ -113,8 +114,8 @@ public class Official {
         try {
             ChatCompletionRequestBody requestBody = ChatCompletionRequestBody.builder()
                     .model(model)
-                    .prompt(messages.get(0).getContent())
-                    //.messages(messages)
+                     .prompt(messages.get(0).getContent())
+                    // .choice(messages.get(0).getContent())
                     .build();
             return objectMapper.writeValueAsString(requestBody);
         } catch (JsonProcessingException e) {
@@ -123,22 +124,23 @@ public class Official {
     }
     
     public ChatCompletionResponseBody askOriginal(String model, String role, String input) throws IOException {
-        return askOriginal(model, Collections.singletonList(Message.builder()
+    	ChatCompletionResponseBody chatCompletionResponseBody = askModelMessage(model, Collections.singletonList(Message.builder() //1
                 .role(role)
                 .content(input)
-                .build()));
+                .build())); 
+    	return chatCompletionResponseBody;
     }
 
-    public ChatCompletionResponseBody askOriginal(String model, List<Message> message) throws IOException {
+    public ChatCompletionResponseBody askModelMessage(String model, List<Message> message) throws IOException {
         RequestBody body = RequestBody.create(buildRequestBody(model, message), MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder()
+        Request request = new Request.Builder() //2
                 .url(apiHost)
                 .header("Authorization", "Bearer " + apiKey)
                 .post(body)
                 .build();
 
-        //try (Response response = okHttpClient. newCall(request).execute()) {
-        Response response = okHttpClient.newCall(request).execute();
+        try (Response response = okHttpClient. newCall(request).execute()) {
+      //  Response response = okHttpClient.newCall(request).execute();
             if (!response.isSuccessful()) {
                 if (response.body() == null) {
                     log.error("Request failed: {}, please try again", response.message());
@@ -152,19 +154,19 @@ public class Official {
                 String bodyString = response.body().string();
                 return objectMapper.readValue(bodyString, ChatCompletionResponseBody.class);
             }
-       // } catch (IOException e) {
-          //  log.error("Request failed: {}", e.getMessage());
-        //    throw new Excecoes(Erros.SERVER_HAD_AN_ERROR.getCode(), e.getMessage());
-    //    }
+        } catch (IOException e) {
+            log.error("Request failed: {}", e.getMessage());
+            throw new Excecoes(Erros.SERVER_HAD_AN_ERROR.getCode(), e.getMessage());
+        }
     }   
     
 	public String ask(String model, String role, String content) throws IOException {
 		ChatCompletionResponseBody chatCompletionResponseBody = askOriginal(model, role, content);
-		List<ChatCompletionResponseBody.Choice> choices = chatCompletionResponseBody.getChoices();
+		List<ChatCompletionResponseBody.Choices> choices = chatCompletionResponseBody.getChoices(); // erro está aqui
 		StringBuilder result = new StringBuilder();
 	
-		for (ChatCompletionResponseBody.Choice choice : choices) {
-			result.append(choice.getText());//.getContent());
+		for (ChatCompletionResponseBody.Choices choice : choices) {
+			result.append(choice.getText());
 		}
 		return result.toString();
 	}
