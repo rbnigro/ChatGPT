@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.ronney.entity.Messages;
-import br.com.ronney.entity.Model;
 import br.com.ronney.entity.request.ChatCompletionRequestBodyText;
+import br.com.ronney.entity.response.ChatCompletionResponseBodyGPT;
 import br.com.ronney.entity.response.ChatCompletionResponseBodyText;
 import br.com.ronney.erros.Erros;
 import br.com.ronney.erros.Excecoes;
@@ -19,32 +19,18 @@ import lombok.extern.slf4j.Slf4j;
 import br.com.ronney.entity.Constants;
 
 @Slf4j
-public class CharGPT {
+public class ChatGPT {
 
 	private final String apiKey;
 	private String apiHost = Constants.DEFAULT_CHAT_COMPLETION_API_URL;
 	protected OkHttpClient okHttpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
-    public CharGPT(String apiKey) {
+    public ChatGPT(String apiKey) {
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient();
     }
 			
-    public String ask(String model, List<Messages> messages) {
-        ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, messages);
-        List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBody.getChoices();
-        StringBuilder result = new StringBuilder();
-        for (ChatCompletionResponseBodyText.Choices choice : choices) {
-            result.append(choice.getText());
-        }
-        return result.toString();
-    }
-
-    public String ask(Model model, String user, String input) {
-        return ask(model.getName(), user, input);
-    }
-    
     private String buildRequestBody(String model, List<Messages> messages) {
         try {
             ChatCompletionRequestBodyText requestBody = ChatCompletionRequestBodyText.builder()
@@ -58,7 +44,7 @@ public class CharGPT {
         }
     }
     
-    public ChatCompletionResponseBodyText askOriginal(String model, String role, String input) {
+    public ChatCompletionResponseBodyGPT askOriginalGPT(String model, String role, String input) {
     	ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, Collections.singletonList(Messages.builder() 
                 .role(role)
                 .content(input)
@@ -66,7 +52,7 @@ public class CharGPT {
     	return chatCompletionResponseBody;
     }
 
-    public ChatCompletionResponseBodyText askModelMessages(String model, List<Messages> messages) {
+    public ChatCompletionResponseBodyGPT askModelMessages(String model, List<Messages> messages) {
         RequestBody body = RequestBody.create(buildRequestBody(model, messages), MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder() 
                 .url(apiHost)
@@ -93,16 +79,14 @@ public class CharGPT {
             throw new Excecoes(Erros.SERVER_HAD_AN_ERROR.getCode(), e.getMessage());
         }
     }   
-    
-	public String ask(String model, String role, String content) {
-		ChatCompletionResponseBodyText chatCompletionResponseBody = askOriginal(model, role, content);
-		List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBody.getChoices();
-		StringBuilder result = new StringBuilder();
-	
-		for (ChatCompletionResponseBodyText.Choices choice : choices) {
-			result.append(choice.getText());
-		}
-		return result.toString();
-	}
 
+    public String askGPT(String model, String role, String content) {
+        ChatCompletionResponseBodyGPT chatCompletionResponseBodyGPT = askModelMessages(model, content);
+        List<ChatCompletionResponseBodyGPT.Choices> choices = chatCompletionResponseBodyGPT.getChoices();
+        StringBuilder result = new StringBuilder();
+        for (ChatCompletionResponseBodyGPT.Choices choice : choices) {
+            result.append(choice.getMessage().getContent());
+        }
+        return result.toString();
+    }
 }

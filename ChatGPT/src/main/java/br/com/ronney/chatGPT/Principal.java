@@ -4,7 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import br.com.ronney.entity.Constants;
-import br.com.ronney.methods.CharGPT;
+import br.com.ronney.methods.ChatGPT;
+import br.com.ronney.methods.ChatText;
 
 public class Principal {
 
@@ -20,7 +21,9 @@ public class Principal {
 	//	Scanner scannerPrompt = new Scanner(System.in);
 	//	System.out.print(myPrompt);
 	//	promptScanner = scannerPrompt.nextLine();
-
+		
+		String sTipo = "T";
+		
 		System.out.println(promptScanner);
 		Properties properties = new Properties();
 		FileInputStream fileInputStream = new FileInputStream("./properties/conf.properties");
@@ -29,13 +32,26 @@ public class Principal {
 		
 		System.out.println("Aguarde...");
 		
-		chamadaChatGPT(promptScanner);
+		chamadaChatGPT(promptScanner, sTipo);
 	//	scannerPrompt.close();
 	}
 
-	private static void chamadaChatGPT(String promptScanner) {
-		CharGPT methodsChatGPT = new CharGPT(API_KEY);
-		String retorno = methodsChatGPT.ask(myModel, "user", promptScanner);
+	private static void chamadaChatGPT(String promptScanner, String pTipo) {
+		ChatGPT methodsChatGPT;
+		ChatText methodsChatText;
+		
+		String retorno = "<vazio>";
+		
+		if (pTipo.toUpperCase().equals("T")) {
+			methodsChatText = new ChatText(API_KEY);
+			retorno = methodsChatText.askText(myModel, "user", promptScanner);
+		}
+		
+		if (pTipo.toUpperCase().equals("G")) {
+			methodsChatGPT = new ChatGPT(API_KEY);
+			retorno = methodsChatGPT.askGPT(myModel, "user", promptScanner);
+		}
+		
 		System.out.println(retorno);
 	}
 }
