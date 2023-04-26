@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import br.com.ronney.entity.Messages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ChatCompletionResponseBodyText {
-
+public class ChatCompletionResponseBodyGPT {
 	@JsonProperty(value = "id")
 	public String id;
 	
@@ -28,27 +29,24 @@ public class ChatCompletionResponseBodyText {
 	@JsonProperty(value = "model")
 	public String model;
 	
-	@JsonProperty(value = "choices")
-	public List<Choices> choices;
-	
 	@JsonProperty(value = "usage")
 	public Usage usage;
 	
-	@Data
-	public static class Choices {
-        @JsonProperty(value = "text")
-        public String text;
+	@JsonProperty(value = "choices")
+	public List<Messages> choices;
 
-        @JsonProperty(value = "index")
-        public Integer index;
-        
-        @JsonProperty(value = "logprobs")
-        private List<String> logprobs;
-        
-        @JsonProperty(value = "finish_reason")
-        public String finishReason;
+    @JsonProperty(value = "finish_reason")
+    public String finishReason;
+    
+    @JsonProperty(value = "index")
+    public Integer index;
+    
+    @Data
+    public static class Choices {
+    	@JsonProperty(value = "message")
+    	public Messages message;
     }
-
+	
 	@Data
     public static class Usage {
         @JsonProperty(value = "prompt_tokens")

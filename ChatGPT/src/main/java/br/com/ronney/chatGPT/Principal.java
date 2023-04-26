@@ -13,7 +13,7 @@ public class Principal {
 	
 	// https://platform.openai.com/docs/models/gpt-3-5
 	private static String myModel = Constants.DEFAULT_MODEL;
-	
+	// private static String myPrompt = "Peça o que quiser: ";
 	private static String promptScanner = "Crie um texto para me ajudar a vender o meu iPhone 8";
 	
 	public static void main(String[] args) throws IOException {

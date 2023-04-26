@@ -11,7 +11,7 @@ import java.net.Proxy;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.ronney.entity.Message;
+import br.com.ronney.entity.Messages;
 import br.com.ronney.entity.Model;
 import br.com.ronney.entity.request.ChatCompletionRequestBodyText;
 import br.com.ronney.entity.response.ChatCompletionResponseBodyText;
@@ -89,16 +89,16 @@ public class CharGPT {
         return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
     }
 
-    public String ask(List<Message> messages) {
+    public String ask(List<Messages> messages) {
         return ask(Constants.DEFAULT_MODEL, messages);
     }
 
-    public String ask(Model model, List<Message> messages) {
+    public String ask(Model model, List<Messages> messages) {
         return ask(model.getName(), messages);
     }
 
-    public String ask(String model, List<Message> message) {
-        ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessage(model, message);
+    public String ask(String model, List<Messages> messages) {
+        ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, messages);
         List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBody.getChoices();
         StringBuilder result = new StringBuilder();
         for (ChatCompletionResponseBodyText.Choices choice : choices) {
@@ -111,7 +111,7 @@ public class CharGPT {
         return ask(model.getName(), user, input);
     }
     
-    private String buildRequestBody(String model, List<Message> messages) {
+    private String buildRequestBody(String model, List<Messages> messages) {
         try {
             ChatCompletionRequestBodyText requestBody = ChatCompletionRequestBodyText.builder()
                     .model(model)
@@ -125,15 +125,15 @@ public class CharGPT {
     }
     
     public ChatCompletionResponseBodyText askOriginal(String model, String role, String input) {
-    	ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessage(model, Collections.singletonList(Message.builder() 
+    	ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, Collections.singletonList(Messages.builder() 
                 .role(role)
                 .content(input)
                 .build())); 
     	return chatCompletionResponseBody;
     }
 
-    public ChatCompletionResponseBodyText askModelMessage(String model, List<Message> message) {
-        RequestBody body = RequestBody.create(buildRequestBody(model, message), MediaType.get("application/json; charset=utf-8"));
+    public ChatCompletionResponseBodyText askModelMessages(String model, List<Messages> messages) {
+        RequestBody body = RequestBody.create(buildRequestBody(model, messages), MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder() 
                 .url(apiHost)
                 .header("Authorization", "Bearer " + apiKey)
