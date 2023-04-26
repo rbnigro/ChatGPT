@@ -58,4 +58,9 @@ public class ChatCompletionResponseBodyGPT {
         @JsonProperty(value = "total_tokens")
         public Integer totalTokens;
     }
+
+	public Object getChoices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

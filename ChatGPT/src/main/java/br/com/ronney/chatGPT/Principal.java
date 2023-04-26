@@ -3,7 +3,7 @@ package br.com.ronney.chatGPT;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import br.com.ronney.entity.Constants;
+import br.com.ronney.entity.Model;
 import br.com.ronney.methods.ChatGPT;
 import br.com.ronney.methods.ChatText;
 
@@ -12,8 +12,6 @@ public class Principal {
 	// https://platform.openai.com/account/api-keys
 	private static String API_KEY;
 	
-	// https://platform.openai.com/docs/models/gpt-3-5
-	private static String myModel = Constants.DEFAULT_MODEL;
 	// private static String myPrompt = "Peça o que quiser: ";
 	private static String promptScanner = "Crie um texto para me ajudar a vender o meu iPhone 8";
 	
@@ -22,7 +20,7 @@ public class Principal {
 	//	System.out.print(myPrompt);
 	//	promptScanner = scannerPrompt.nextLine();
 		
-		String sTipo = "T";
+		String sTipo = "g";
 		
 		System.out.println(promptScanner);
 		Properties properties = new Properties();
@@ -44,12 +42,12 @@ public class Principal {
 		
 		if (pTipo.toUpperCase().equals("T")) {
 			methodsChatText = new ChatText(API_KEY);
-			retorno = methodsChatText.askText(myModel, "user", promptScanner);
+			retorno = methodsChatText.askText(Model.TEXT_DAVINCI_003.getName(), promptScanner);
 		}
 		
 		if (pTipo.toUpperCase().equals("G")) {
 			methodsChatGPT = new ChatGPT(API_KEY);
-			retorno = methodsChatGPT.askGPT(myModel, "user", promptScanner);
+			retorno = methodsChatGPT.askGPT(Model.GPT_3_5_TURBO_0301.getName(), promptScanner);
 		}
 		
 		System.out.println(retorno);

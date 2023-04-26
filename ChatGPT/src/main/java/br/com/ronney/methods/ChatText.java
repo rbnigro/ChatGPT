@@ -21,16 +21,16 @@ import br.com.ronney.entity.Constants;
 public class ChatText {
 
 	private final String apiKey;
-	private String apiHost = Constants.DEFAULT_CHAT_COMPLETION_API_URL;
+	private String apiHost = Constants.DEFAULT_COMPLETION_API_URL;
 	protected OkHttpClient okHttpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
-    public ChatText(String apiKey) {
+    public ChatText(String apiKey) { // 1
         this.apiKey = apiKey;
         this.okHttpClient = new OkHttpClient();
     }
 			
-    private String buildRequestBody(String model, List<Messages> messages) {
+    private String buildRequestBody(String model, List<Messages> messages) { // 5
         try {
             ChatCompletionRequestBodyText requestBody = ChatCompletionRequestBodyText.builder()
                     .model(model)
@@ -43,7 +43,7 @@ public class ChatText {
         }
     }
     
-    public ChatCompletionResponseBodyText askOriginalText(String model, String role, String input) {
+    public ChatCompletionResponseBodyText askOriginalText(String model, String role, String input) { // 3
     	ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, Collections.singletonList(Messages.builder() 
                 .role(role)
                 .content(input)
@@ -51,7 +51,7 @@ public class ChatText {
     	return chatCompletionResponseBody;
     }
 
-    public ChatCompletionResponseBodyText askModelMessages(String model, List<Messages> messages) {
+    public ChatCompletionResponseBodyText askModelMessages(String model, List<Messages> messages) { // 4
         RequestBody body = RequestBody.create(buildRequestBody(model, messages), MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder() 
                 .url(apiHost)
@@ -79,8 +79,8 @@ public class ChatText {
         }
     }   
     
-	public String askText(String model, String role, String content) {
-		ChatCompletionResponseBodyText chatCompletionResponseBodyText = askOriginalText(model, role, content);
+	public String askText(String model, String content) { // 2
+		ChatCompletionResponseBodyText chatCompletionResponseBodyText = askOriginalText(model, "user", content);
 		List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBodyText.getChoices();
 		StringBuilder result = new StringBuilder();
 	
