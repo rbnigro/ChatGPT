@@ -6,8 +6,6 @@ import okhttp3.MediaType;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,50 +31,6 @@ public class CharGPT {
         this.okHttpClient = new OkHttpClient();
     }
 			
-    public CharGPT(String apiKey, OkHttpClient okHttpClient) {
-        this.apiKey = apiKey;
-        this.okHttpClient = okHttpClient;
-    }
-
-
-    public CharGPT(String apiKey, Proxy proxy) {
-        this.apiKey = apiKey;
-        this.okHttpClient = new OkHttpClient.Builder().proxy(proxy).build();
-    }
-
-    public CharGPT(String apiKey, String proxyHost, int proxyPort) {
-        this.apiKey = apiKey;
-        this.okHttpClient = new OkHttpClient.Builder().
-                proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
-                .build();
-    }
-    
-    public CharGPT(String apiHost, String apiKey) {
-        this.apiHost = apiHost;
-        this.apiKey = apiKey;
-        this.okHttpClient = new OkHttpClient();
-    }
-    
-    public CharGPT(String apiHost, String apiKey, OkHttpClient okHttpClient) {
-        this.apiHost = apiHost;
-        this.apiKey = apiKey;
-        this.okHttpClient = okHttpClient;
-    }
-
-    public CharGPT(String apiHost, String apiKey, Proxy proxy) {
-        this.apiHost = apiHost;
-        this.apiKey = apiKey;
-        this.okHttpClient = new OkHttpClient.Builder().proxy(proxy).build();
-    }
-
-    public CharGPT(String apiHost, String apiKey, String proxyHost, int proxyPort) {
-        this.apiHost = apiHost;
-        this.apiKey = apiKey;
-        this.okHttpClient = new OkHttpClient.Builder().
-                proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)))
-                .build();
-    }
-
     public String ask(String model, List<Messages> messages) {
         ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, messages);
         List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBody.getChoices();
