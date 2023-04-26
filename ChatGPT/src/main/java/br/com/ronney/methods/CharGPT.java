@@ -10,10 +10,11 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Collections;
 import java.util.List;
-import br.com.ronney.entity.ChatCompletionRequestBody;
-import br.com.ronney.entity.ChatCompletionResponseBody;
+
 import br.com.ronney.entity.Message;
 import br.com.ronney.entity.Model;
+import br.com.ronney.entity.request.ChatCompletionRequestBodyText;
+import br.com.ronney.entity.response.ChatCompletionResponseBodyText;
 import br.com.ronney.erros.Erros;
 import br.com.ronney.erros.Excecoes;
 import lombok.extern.slf4j.Slf4j;
@@ -76,46 +77,46 @@ public class CharGPT {
                 .build();
     }
 
-    public String ask(String input) throws IOException {
+    public String ask(String input) {
         return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
     }
 
-    public String ask(String user, String input) throws IOException {
+    public String ask(String user, String input) {
         return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
     }
 
-    public String ask(Model model, String input) throws IOException {
+    public String ask(Model model, String input) {
         return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
     }
 
-    public String ask(List<Message> messages) throws IOException {
+    public String ask(List<Message> messages) {
         return ask(Constants.DEFAULT_MODEL, messages);
     }
 
-    public String ask(Model model, List<Message> messages) throws IOException {
+    public String ask(Model model, List<Message> messages) {
         return ask(model.getName(), messages);
     }
 
-    public String ask(String model, List<Message> message) throws IOException {
-        ChatCompletionResponseBody chatCompletionResponseBody = askModelMessage(model, message);
-        List<ChatCompletionResponseBody.Choices> choices = chatCompletionResponseBody.getChoices();
+    public String ask(String model, List<Message> message) {
+        ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessage(model, message);
+        List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBody.getChoices();
         StringBuilder result = new StringBuilder();
-        for (ChatCompletionResponseBody.Choices choice : choices) {
+        for (ChatCompletionResponseBodyText.Choices choice : choices) {
             result.append(choice.getText());
         }
         return result.toString();
     }
 
-    public String ask(Model model, String user, String input) throws IOException {
+    public String ask(Model model, String user, String input) {
         return ask(model.getName(), user, input);
     }
     
     private String buildRequestBody(String model, List<Message> messages) {
         try {
-            ChatCompletionRequestBody requestBody = ChatCompletionRequestBody.builder()
+            ChatCompletionRequestBodyText requestBody = ChatCompletionRequestBodyText.builder()
                     .model(model)
-                     .prompt(messages.get(0).getContent())
-                    // .choice(messages.get(0).getContent())
+                    .prompt(messages.get(0).getContent())
+                    .temperature((float) 1.2)
                     .build();
             return objectMapper.writeValueAsString(requestBody);
         } catch (JsonProcessingException e) {
@@ -123,24 +124,23 @@ public class CharGPT {
         }
     }
     
-    public ChatCompletionResponseBody askOriginal(String model, String role, String input) throws IOException {
-    	ChatCompletionResponseBody chatCompletionResponseBody = askModelMessage(model, Collections.singletonList(Message.builder() //1
+    public ChatCompletionResponseBodyText askOriginal(String model, String role, String input) {
+    	ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessage(model, Collections.singletonList(Message.builder() 
                 .role(role)
                 .content(input)
                 .build())); 
     	return chatCompletionResponseBody;
     }
 
-    public ChatCompletionResponseBody askModelMessage(String model, List<Message> message) throws IOException {
+    public ChatCompletionResponseBodyText askModelMessage(String model, List<Message> message) {
         RequestBody body = RequestBody.create(buildRequestBody(model, message), MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder() //2
+        Request request = new Request.Builder() 
                 .url(apiHost)
                 .header("Authorization", "Bearer " + apiKey)
                 .post(body)
                 .build();
 
         try (Response response = okHttpClient. newCall(request).execute()) {
-      //  Response response = okHttpClient.newCall(request).execute();
             if (!response.isSuccessful()) {
                 if (response.body() == null) {
                     log.error("Request failed: {}, please try again", response.message());
@@ -152,7 +152,7 @@ public class CharGPT {
             } else {
                 assert response.body() != null;
                 String bodyString = response.body().string();
-                return objectMapper.readValue(bodyString, ChatCompletionResponseBody.class);
+                return objectMapper.readValue(bodyString, ChatCompletionResponseBodyText.class);
             }
         } catch (IOException e) {
             log.error("Request failed: {}", e.getMessage());
@@ -160,12 +160,12 @@ public class CharGPT {
         }
     }   
     
-	public String ask(String model, String role, String content) throws IOException {
-		ChatCompletionResponseBody chatCompletionResponseBody = askOriginal(model, role, content);
-		List<ChatCompletionResponseBody.Choices> choices = chatCompletionResponseBody.getChoices(); // erro está aqui
+	public String ask(String model, String role, String content) {
+		ChatCompletionResponseBodyText chatCompletionResponseBody = askOriginal(model, role, content);
+		List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBody.getChoices();
 		StringBuilder result = new StringBuilder();
 	
-		for (ChatCompletionResponseBody.Choices choice : choices) {
+		for (ChatCompletionResponseBodyText.Choices choice : choices) {
 			result.append(choice.getText());
 		}
 		return result.toString();

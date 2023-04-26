@@ -1,9 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>br.com.ronney</groupId>
 	<artifactId>ChatGPT</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ChatGPT</name>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>14</maven.compiler.source>
+		<maven.compiler.target>14</maven.compiler.target>
+		
+		<lombok.version>1.18.26</lombok.version>
+		<hutool.version>5.8.18</hutool.version>
+	</properties>
 	
 	<developers>
 		<developer>
@@ -17,13 +28,7 @@
     		<artifactId>okhttp</artifactId>
     		<version>5.0.0-alpha.11</version>
 		</dependency>
-		<!--
-		<dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.11.0</version>
-        </dependency>
-        -->
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -33,7 +38,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
+            <version>${lombok.version}</version>
         </dependency>
         
 		<dependency>
@@ -51,13 +56,13 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
-            <version>5.8.10</version>
+            <version>${hutool.version}</version>
         </dependency>
         
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
-            <version>5.8.10</version>
+            <version>${hutool.version}</version>
         </dependency>
         
          <dependency>

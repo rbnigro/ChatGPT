@@ -1,4 +1,4 @@
-package br.com.ronney.entity;
+package br.com.ronney.entity.response;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ChatCompletionResponseBody {
+public class ChatCompletionResponseBodyText {
 
 	@JsonProperty(value = "id")
 	public String id;

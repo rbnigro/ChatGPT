@@ -1,10 +1,11 @@
-package br.com.ronney.entity;
+package br.com.ronney.entity.request;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import br.com.ronney.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +16,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ChatCompletionRequestBodyERROR {
+public class ChatCompletionRequestBodyGPT {
 
     @JsonProperty(value = "model")
     private String model;
     
-    @JsonProperty(value = "choice")
-    private List<MessageLocal> choice;
+    @JsonProperty(value = "messages")
+    private List<Message> messages;
     
     @Data
     public static class Choices {
