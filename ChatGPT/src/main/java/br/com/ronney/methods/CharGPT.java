@@ -77,26 +77,6 @@ public class CharGPT {
                 .build();
     }
 
-    public String ask(String input) {
-        return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
-    }
-
-    public String ask(String user, String input) {
-        return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
-    }
-
-    public String ask(Model model, String input) {
-        return ask(Constants.DEFAULT_MODEL, "ronneynigro@gmail.com", input);
-    }
-
-    public String ask(List<Messages> messages) {
-        return ask(Constants.DEFAULT_MODEL, messages);
-    }
-
-    public String ask(Model model, List<Messages> messages) {
-        return ask(model.getName(), messages);
-    }
-
     public String ask(String model, List<Messages> messages) {
         ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, messages);
         List<ChatCompletionResponseBodyText.Choices> choices = chatCompletionResponseBody.getChoices();

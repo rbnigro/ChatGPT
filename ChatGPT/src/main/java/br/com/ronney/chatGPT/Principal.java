@@ -33,7 +33,7 @@ public class Principal {
 	//	scannerPrompt.close();
 	}
 
-	private static void chamadaChatGPT(String promptScanner) throws IOException {
+	private static void chamadaChatGPT(String promptScanner) {
 		CharGPT methodsChatGPT = new CharGPT(API_KEY);
 		String retorno = methodsChatGPT.ask(myModel, "user", promptScanner);
 		System.out.println(retorno);
