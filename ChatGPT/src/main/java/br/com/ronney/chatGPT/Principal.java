@@ -13,7 +13,7 @@ public class Principal {
 	private static String API_KEY;
 	
 	// private static String myPrompt = "Peça o que quiser: ";
-	private static String promptScanner = "Crie um texto para me ajudar a vender o meu iPhone 8";
+	private static String promptScanner = "Quero fazer um software que se comunique com o chatGPT";
 	
 	public static void main(String[] args) throws IOException {
 	//	Scanner scannerPrompt = new Scanner(System.in);

@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import br.com.ronney.entity.Messages;
+import br.com.ronney.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class ChatCompletionRequestBodyGPT {
     private String model;
     
     @JsonProperty(value = "messages")
-    private List<Messages> messages;
+    private List<Message> messages;
     
     @JsonProperty(value = "temperature")
     private Float temperature;

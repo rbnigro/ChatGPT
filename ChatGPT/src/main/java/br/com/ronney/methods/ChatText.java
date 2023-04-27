@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.ronney.entity.Messages;
+import br.com.ronney.entity.Message;
 import br.com.ronney.entity.request.ChatCompletionRequestBodyText;
 import br.com.ronney.entity.response.ChatCompletionResponseBodyText;
 import br.com.ronney.erros.Erros;
@@ -30,7 +30,7 @@ public class ChatText {
         this.okHttpClient = new OkHttpClient();
     }
 			
-    private String buildRequestBody(String model, List<Messages> messages) { // 5
+    private String buildRequestBody(String model, List<Message> messages) { // 5
         try {
             ChatCompletionRequestBodyText requestBody = ChatCompletionRequestBodyText.builder()
                     .model(model)
@@ -44,14 +44,14 @@ public class ChatText {
     }
     
     public ChatCompletionResponseBodyText askOriginalText(String model, String role, String input) { // 3
-    	ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, Collections.singletonList(Messages.builder() 
+    	ChatCompletionResponseBodyText chatCompletionResponseBody = askModelMessages(model, Collections.singletonList(Message.builder() 
                 .role(role)
                 .content(input)
                 .build())); 
     	return chatCompletionResponseBody;
     }
 
-    public ChatCompletionResponseBodyText askModelMessages(String model, List<Messages> messages) { // 4
+    public ChatCompletionResponseBodyText askModelMessages(String model, List<Message> messages) { // 4
         RequestBody body = RequestBody.create(buildRequestBody(model, messages), MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder() 
                 .url(apiHost)

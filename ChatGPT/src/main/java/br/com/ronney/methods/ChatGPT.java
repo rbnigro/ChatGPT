@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.ronney.entity.Messages;
+import br.com.ronney.entity.Message;
 import br.com.ronney.entity.request.ChatCompletionRequestBodyGPT;
 import br.com.ronney.entity.response.ChatCompletionResponseBodyGPT;
-import br.com.ronney.entity.response.ChatCompletionResponseBodyGPT.Choices;
+import br.com.ronney.entity.response.ChatCompletionResponseBodyGPT.Choice;
 import br.com.ronney.erros.Erros;
 import br.com.ronney.erros.Excecoes;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class ChatGPT {
         this.okHttpClient = new OkHttpClient();
     }
 			
-    private String buildRequestBody(String model, List<Messages> messages) { // 5
+    private String buildRequestBody(String model, List<Message> messages) { // 5
         try {
             ChatCompletionRequestBodyGPT requestBody = ChatCompletionRequestBodyGPT.builder()
                     .model(model)
@@ -45,14 +45,14 @@ public class ChatGPT {
     }
     
     public ChatCompletionResponseBodyGPT askOriginalGPT(String model, String role, String input) { // 3
-    	ChatCompletionResponseBodyGPT chatCompletionResponseBody = askModelMessages(model, Collections.singletonList(Messages.builder() 
+    	ChatCompletionResponseBodyGPT chatCompletionResponseBody = askModelMessages(model, Collections.singletonList(Message.builder() 
                 .role(role)
                 .content(input)
                 .build())); 
     	return chatCompletionResponseBody;
     }
 
-    public ChatCompletionResponseBodyGPT askModelMessages(String model, List<Messages> messages) { // 4
+    public ChatCompletionResponseBodyGPT askModelMessages(String model, List<Message> messages) { // 4
         RequestBody body = RequestBody.create(buildRequestBody(model, messages), MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder() 
                 .url(apiHost)
@@ -82,10 +82,10 @@ public class ChatGPT {
 
     public String askGPT(String model, String content) { // 2
         ChatCompletionResponseBodyGPT chatCompletionResponseBodyGPT = askOriginalGPT(model, "user", content);
-        List<ChatCompletionResponseBodyGPT.Choices> choices = (List<Choices>) chatCompletionResponseBodyGPT.getChoices();
+        List<ChatCompletionResponseBodyGPT.Choice> choices = (List<Choice>) chatCompletionResponseBodyGPT.getChoices();
         StringBuilder result = new StringBuilder();
         
-        for (ChatCompletionResponseBodyGPT.Choices choice : choices) {
+        for (ChatCompletionResponseBodyGPT.Choice choice : choices) {
             result.append(choice.getMessage().getContent());
         }
         return result.toString();

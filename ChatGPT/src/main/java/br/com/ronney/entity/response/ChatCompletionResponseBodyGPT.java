@@ -5,7 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import br.com.ronney.entity.Messages;
+import br.com.ronney.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,18 +33,18 @@ public class ChatCompletionResponseBodyGPT {
 	public Usage usage;
 	
 	@JsonProperty(value = "choices")
-	public List<Messages> choices;
+	public List<Choice> choices;
 
-    @JsonProperty(value = "finish_reason")
-    public String finishReason;
-    
-    @JsonProperty(value = "index")
-    public Integer index;
-    
     @Data
-    public static class Choices {
+    public static class Choice {
+        @JsonProperty(value = "index")
+        public Integer index;
+        
     	@JsonProperty(value = "message")
-    	public Messages message;
+    	public Message message;
+
+        @JsonProperty(value = "finish_reason")
+        public String finishReason;
     }
 	
 	@Data
@@ -58,9 +58,4 @@ public class ChatCompletionResponseBodyGPT {
         @JsonProperty(value = "total_tokens")
         public Integer totalTokens;
     }
-
-	public Object getChoices() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
