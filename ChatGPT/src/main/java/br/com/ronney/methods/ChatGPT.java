@@ -35,7 +35,10 @@ public class ChatGPT {
         try {
             ChatCompletionRequestBodyGPT requestBody = ChatCompletionRequestBodyGPT.builder()
                     .model(model)
+                    //.max_tokens(4096)
                     .messages(messages)
+                   // .n(1) // Quantidade de conclusões
+                   // .stop(":")
                     .temperature((float) 1.2)
                     .build();
             return objectMapper.writeValueAsString(requestBody);

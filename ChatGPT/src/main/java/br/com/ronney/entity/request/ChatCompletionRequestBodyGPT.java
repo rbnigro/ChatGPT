@@ -21,6 +21,15 @@ public class ChatCompletionRequestBodyGPT {
     @JsonProperty(value = "model")
     private String model;
     
+    @JsonProperty(value = "max_tokens")
+    private Integer max_tokens;
+    
+    @JsonProperty(value = "n")
+    private Integer n;
+    
+    @JsonProperty(value = "stop")
+    private String stop;
+    
     @JsonProperty(value = "messages")
     private List<Message> messages;
     
