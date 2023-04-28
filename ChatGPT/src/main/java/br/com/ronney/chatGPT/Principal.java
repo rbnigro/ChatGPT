@@ -33,7 +33,7 @@ public class Principal {
 		Scanner scannerPrompt = new Scanner(System.in);
 		
 		while (iPassagens <= 3) {
-			System.out.println("Você: ");
+			System.out.print("Você:");
 			sUserInput = scannerPrompt.nextLine();
 		
 			sInitPrompt += sUserInput + "\nChatbot:";
