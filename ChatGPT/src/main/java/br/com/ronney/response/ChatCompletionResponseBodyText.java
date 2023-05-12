@@ -1,4 +1,4 @@
-package br.com.ronney.entity.response;
+package br.com.ronney.response;
 
 import java.util.List;
 
@@ -31,9 +31,6 @@ public class ChatCompletionResponseBodyText {
 	@JsonProperty(value = "choices")
 	public List<Choices> choices;
 	
-	@JsonProperty(value = "usage")
-	public Usage usage;
-	
 	@Data
 	public static class Choices {
         @JsonProperty(value = "text")
@@ -48,6 +45,10 @@ public class ChatCompletionResponseBodyText {
         @JsonProperty(value = "finish_reason")
         public String finishReason;
     }
+
+
+	@JsonProperty(value = "usage")
+	public Usage usage;
 
 	@Data
     public static class Usage {
