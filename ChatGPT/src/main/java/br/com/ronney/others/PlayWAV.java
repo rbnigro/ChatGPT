@@ -5,15 +5,14 @@ import java.io.IOException;
 
 import javax.sound.sampled.*;
 
-public class PlayMP3 {
+public class PlayWAV {
 	
-	public static void main(String[] args) throws IOException, LineUnavailableException, UnsupportedAudioFileException, InterruptedException {
+	public static void executarWAV(String sPath) throws IOException, LineUnavailableException, UnsupportedAudioFileException, InterruptedException {
 
-		String sCaminho = "C:/Users/ronne/OneDrive/Documentos/ChatGPT/chat01.wav";
 		Clip clip = AudioSystem.getClip();
     	
         try {
-        	File diretorio = new File(sCaminho);
+        	File diretorio = new File(sPath);
             AudioInputStream oStream = AudioSystem.getAudioInputStream(diretorio);
             clip.open(oStream);
             clip.start();

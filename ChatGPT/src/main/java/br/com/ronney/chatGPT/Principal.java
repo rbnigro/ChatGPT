@@ -3,26 +3,31 @@ package br.com.ronney.chatGPT;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+import br.com.ronney.others.PlayWAV;
 import br.com.ronney.tipoChat.ChatPorTexto;
 
 public class Principal {
 
-	private static String sUserInput = "";
+	private static String sTipoChat = "";
 	
-	public static void main(String[] args) throws IOException {
-		Scanner scannerPrompt = new Scanner(System.in);
+	public static void main(String[] args) throws IOException, LineUnavailableException, UnsupportedAudioFileException, InterruptedException {
 		
 		System.out.print("Tipo de Chat <T>exto ou <V>oz:");
-		sUserInput = scannerPrompt.nextLine();
 		
-		if (sUserInput.toUpperCase().equals("T")) {
+		Scanner scannerPrompt = new Scanner(System.in);
+		sTipoChat = scannerPrompt.nextLine();
+		
+		
+		if (sTipoChat.toUpperCase().equals("T")) 
 			ChatPorTexto.chatPorTexto();
-		}
-		else if (sUserInput.toUpperCase().equals("V")) {
-			System.out.println("Chat em Voz");
-		}
-		else {
+		else if (sTipoChat.toUpperCase().equals("V")) 
+			PlayWAV.executarWAV("C:/Users/ronne/OneDrive/Documentos/ChatGPT/chat01.wav");
+		else 
 			System.out.println("Opção não reconhecida!");
-		}
+		
+		scannerPrompt.close();
 	}
 }
