@@ -1,4 +1,4 @@
-package br.com.ronney.entity.service;
+package br.com.ronney.service;
 
 import java.util.List;
 

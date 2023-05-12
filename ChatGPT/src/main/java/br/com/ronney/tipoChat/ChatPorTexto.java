@@ -26,6 +26,7 @@ public class ChatPorTexto {
 		
 		Properties properties = new Properties();
 		FileInputStream fileInputStream;
+		
 		try {
 			fileInputStream = new FileInputStream("./properties/conf.properties");
 			properties.load(fileInputStream);

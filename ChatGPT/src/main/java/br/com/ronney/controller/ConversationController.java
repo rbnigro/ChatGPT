@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ronney.model.Conversation;
-import br.com.ronney.entity.service.ConversationService;
+import br.com.ronney.service.ConversationService;
 
 @RestController
 @RequestMapping("/api/conversations")
