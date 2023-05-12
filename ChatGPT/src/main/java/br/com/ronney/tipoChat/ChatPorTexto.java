@@ -12,7 +12,7 @@ import br.com.ronney.methods.ChatText;
 
 public class ChatPorTexto {
 
-	private static String API_KEY; // https://platform.openai.com/account/api-keys
+	private static String API_KEY; 
 	private static String sUserInput = "";
 	private static String sInitPrompt = "";
 	private static String sQuestionDialog = "";
