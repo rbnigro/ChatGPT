@@ -1,4 +1,4 @@
-package br.com.ronney.entity.dto;
+package br.com.ronney.dto;
 
 public class ConversationDTO {
 

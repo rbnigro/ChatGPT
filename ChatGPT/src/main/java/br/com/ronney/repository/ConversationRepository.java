@@ -1,10 +1,10 @@
-package br.com.ronney.entity.repository;
+package br.com.ronney.repository;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.ronney.entity.model.Conversation;
+import br.com.ronney.model.Conversation;
 
 @Repository
 public interface ConversationRepository {

@@ -10,21 +10,20 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.ronney.entity.Message;
-import br.com.ronney.entity.request.ChatCompletionRequestBodyGPT;
-import br.com.ronney.entity.response.ChatCompletionResponseBodyGPT;
-import br.com.ronney.entity.response.ChatCompletionResponseBodyGPT.Choice;
+import br.com.ronney.request.ChatCompletionRequestBodyGPT;
+import br.com.ronney.response.ChatCompletionResponseBodyGPT;
+import br.com.ronney.response.ChatCompletionResponseBodyGPT.Choice;
 import br.com.ronney.erros.Erros;
 import br.com.ronney.erros.Excecoes;
-import lombok.extern.slf4j.Slf4j;
 import br.com.ronney.entity.Constants;
 
-@Slf4j
 public class ChatGPT {
 
 	private final String apiKey;
 	private String apiHost = Constants.DEFAULT_CHAT_COMPLETION_API_URL;
 	protected OkHttpClient okHttpClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
+   // private static final Logger logger = LogManager.getLogger(ChatGPT.class);  
     
     public ChatGPT(String apiKey) { // 1
         this.apiKey = apiKey;
@@ -66,10 +65,10 @@ public class ChatGPT {
         try (Response response = okHttpClient. newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 if (response.body() == null) {
-                    log.error("Request failed: {}, please try again", response.message());
+               // 	logger.error("Request failed: {}, please try again" + response.message());
                     throw new Excecoes(response.code(), "Request failed");
                 } else {
-                    log.error("Request failed: {}, please try again", response.body().string());
+                //	logger.error("Request failed: {}, please try again" + response.body().string());
                     throw new Excecoes(response.code(), response.body().string());
                 }
             } else {
@@ -78,7 +77,7 @@ public class ChatGPT {
                 return objectMapper.readValue(bodyString, ChatCompletionResponseBodyGPT.class);
             }
         } catch (IOException e) {
-            log.error("Request failed: {}", e.getMessage());
+        //	logger.error("Request failed: " + e.getMessage());
             throw new Excecoes(Erros.SERVER_HAD_AN_ERROR.getCode(), e.getMessage());
         }
     }   

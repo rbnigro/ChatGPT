@@ -1,4 +1,4 @@
-package br.com.ronney.entity.request;
+package br.com.ronney.request;
 
 import java.util.List;
 

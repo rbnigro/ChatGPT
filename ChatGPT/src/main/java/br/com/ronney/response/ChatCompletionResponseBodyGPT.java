@@ -1,4 +1,4 @@
-package br.com.ronney.entity.response;
+package br.com.ronney.response;
 
 import java.util.List;
 

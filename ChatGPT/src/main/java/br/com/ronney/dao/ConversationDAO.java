@@ -1,4 +1,4 @@
-package br.com.ronney.entity.dao;
+package br.com.ronney.dao;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
-import br.com.ronney.entity.model.Conversation;
+import br.com.ronney.model.Conversation;
 import lombok.AllArgsConstructor;
 
 @Repository
@@ -27,7 +27,7 @@ public class ConversationDAO {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.save(conversation);
+            session.persist(conversation);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

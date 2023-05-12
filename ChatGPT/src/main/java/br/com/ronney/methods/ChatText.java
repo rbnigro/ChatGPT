@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.ronney.entity.Message;
-import br.com.ronney.entity.request.ChatCompletionRequestBodyText;
-import br.com.ronney.entity.response.ChatCompletionResponseBodyText;
+import br.com.ronney.request.ChatCompletionRequestBodyText;
+import br.com.ronney.response.ChatCompletionResponseBodyText;
 import br.com.ronney.erros.Erros;
 import br.com.ronney.erros.Excecoes;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,7 @@ public class ChatText {
             ChatCompletionRequestBodyText requestBody = ChatCompletionRequestBodyText.builder()
                     .model(model)
                     .prompt(messages.get(0).getContent())
+                    .maxTokens(1024)
                     .temperature((float) 1.2)
                     .build();
             return objectMapper.writeValueAsString(requestBody);
@@ -56,6 +57,7 @@ public class ChatText {
         Request request = new Request.Builder() 
                 .url(apiHost)
                 .header("Authorization", "Bearer " + apiKey)
+                .header("Content-Type", "application/json")
                 .post(body)
                 .build();
 

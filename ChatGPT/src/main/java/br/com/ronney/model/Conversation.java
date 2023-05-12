@@ -1,4 +1,4 @@
-package br.com.ronney.entity.model;
+package br.com.ronney.model;
 
 import java.time.LocalDateTime;
 

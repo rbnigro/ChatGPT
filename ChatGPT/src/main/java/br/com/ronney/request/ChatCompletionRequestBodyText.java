@@ -1,4 +1,4 @@
-package br.com.ronney.entity.request;
+package br.com.ronney.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
