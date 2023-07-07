@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Scanner;
 
+import br.com.ronney.voices.Voices;
 import br.com.ronney.entity.TextModel;
 import br.com.ronney.methods.ChatGPT;
 import br.com.ronney.methods.ChatText;
@@ -45,15 +46,31 @@ public class ChatPorTexto {
 		
 			sInitPrompt += sUserInput + "\nChatbot:";
 		
-			System.out.println("Aguarde...");
+			System.out.println("Estou pensando, por favor espere...");
 		
 			if (!sUserInput.isEmpty())
 			{
 				sQuestionDialog = sUserInput + sInitPrompt;
 				response = chamadaChatGPT(sQuestionDialog, sTipo);
+				
+				System.out.println(response);
+				
+				try (Scanner scannerTypeAnswer = new Scanner(System.in)) {
+					String sTypeAnswer = scannerTypeAnswer.nextLine();
+					
+				//	System.out.println("Resposta por <G>oogle (PT-BR) ou <F>reeTTS (EN-US): ");
+					Voices voice = new Voices();
+					
+				//	if (sTypeAnswer.toUpperCase().equals("F")) {
+				//		voice.AnswerFreeTTS(response);
+				//	} else {
+						voice.AnswerGoogle(response);
+				//	}
+				}
+					
+				
 			}
-			System.out.println(response);
-	
+			
 			sInitPrompt += response + "\n";
 
 			iPassagens++;
